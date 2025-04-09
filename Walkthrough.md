@@ -1,130 +1,50 @@
-🧠 ExportRAT - Lab Walkthrough
+🧠 APT38 – Hermes Sample Walkthrough (drmaiprave.exe)
+📁 Initial Sample
+File Name: drmaiprave.exe
 
-📁 Initial Sample  
-**File Name**: export.rar  
-**MD5**: c700d75303b8cc2ea8a996cd5e975ec1  
-**Source**: MalwareBazaar Sample Link
+MD5: 77c29d464efcae961424ae050453ef11
 
----
+Source: VirusTotal Report
 
-### 🧩 Q1 – What is the name of the main executable file contained in export.rar?
+Context: Identified as a variant of Hermes ransomware, linked to APT38 (Lazarus Group), used during financially motivated cyber operations.
 
-🔍 **Investigation**  
-Search the MD5 hash `c700d75303b8cc2ea8a996cd5e975ec1` on [MalwareBazaar](https://bazaar.abuse.ch).  
-In the **Contained Files** section, identify the file with a MIME type indicating it's a Windows executable (`application/x-dosexec`).
+✅ Step-by-Step Solution
+🧩 Q1 – What is the name of the analyzed file?
+Answer: drmaiprave.exe
+🔎 Found in VirusTotal's file details.
 
-✅ **Answer**  
-x334761.dat  
-(Note: Despite the `.dat` extension, this file is a disguised PE executable)
+🧩 Q2 – What is the file type?
+Answer: PE32 executable (Windows)
+🔎 Confirmed by file metadata and static analysis.
 
----
+🧩 Q3 – Which APT group is linked to this sample?
+Answer: APT38 (Lazarus)
+🔎 Attribution based on reports from Mandiant, MITRE, and others.
 
-### 🧩 Q2 – What malware family name is assigned to the sample according to Hybrid Analysis?
+🧩 Q4 – What MITRE ATT&CK TTP is used for persistence?
+Answer: T1547.001 – Registry Run Key
+🔎 The malware modifies HKCU\Software\Microsoft\Windows\CurrentVersion\Run to maintain persistence.
 
-🔍 **Investigation**  
-Search the SHA256 hash `8cc57bc1284f68b2aae1e6cb8fa86793db131e9bbbfb40b5eb235a0628c57da9` on [Hybrid Analysis](https://hybrid-analysis.com).  
-Check the **AV detection section** or **Overview tab** for the label or family name assigned to the sample.
+🧩 Q5 – What TTP is used for execution?
+Answer: T1059.003 – Windows Command Shell
+🔎 Executes commands via cmd.exe as part of its runtime behavior.
 
-✅ **Answer**  
-ZephyrMiner
+🧩 Q6 – What evasion technique is used?
+Answer: T1027 – Obfuscated Files or Information
+🔎 Uses packing and obfuscation to avoid static detection.
 
----
+🧩 Q7 – What protocol is used for C2 communication?
+Answer: HTTP(S)
+🔎 Observed network traffic indicates outbound HTTP/S requests to C2 servers.
 
-### 🧩 Q3 – Which IP address is contacted by the payload after execution?
+🧩 Q8 – What is the primary function of the malware?
+Answer: Ransomware (Hermes)
+🔎 Encrypts system files and drops a ransom note.
 
-🔍 **Investigation**  
-Use the SHA256 hash to search on Hybrid Analysis.  
-Go to the Network section > Contacted Hosts or DNS requests.  
-Note any suspicious IP address contacted by the sample.
+🧩 Q9 – Does the malware serve a secondary role? If yes, what is it?
+Answer: Diversion post-breach (covering tracks after fraud)
+🔎 Hermes is used post-operation to destroy evidence and distract incident responders.
 
-✅ **Answer**  
-185.234.247.118
-
----
-
-### 🧩 Q4 – What country is this IP located in?
-
-🔍 **Investigation**  
-Go to AbuseIPDB or IPinfo.io.  
-Paste the IP and check the geolocation info.
-
-✅ **Answer**  
-Russia
-
----
-
-### 🧩 Q5 – What domain name does the payload use to contact its C2 server?
-
-🔍 **Investigation**  
-In Hybrid Analysis, check HTTP requests or DNS requests.  
-If not visible, check the Behavior tab or use ANY.RUN.
-
-✅ **Answer**  
-morningglow[.]ddns[.]net
-
----
-
-### 🧩 Q6 – What is the name of the executable dropped to disk after extraction?
-
-🔍 **Investigation**  
-In Hybrid Analysis, navigate to the Dropped Files tab.  
-Look for .exe or .dll files written to AppData, Temp, or Startup.
-
-✅ **Answer**  
-x334761.dat  
-(Note: Even though .dat, this file is a disguised PE executable)
-
----
-
-### 🧩 Q7 – Which Windows registry key is modified to achieve persistence?
-
-🔍 **Investigation**  
-Go to the Registry Activity tab in Hybrid Analysis or ANY.RUN.  
-Look for keys under CurrentVersion\Run.
-
-✅ **Answer**  
-HKCU\Software\Microsoft\Windows\CurrentVersion\Run\OfficeUpdate
-
----
-
-### 🧩 Q8 – Which protocol does the malware use to communicate with its C2?
-
-🔍 **Investigation**  
-Check Network tab in Hybrid Analysis or packet capture data.  
-Observe the protocol used to reach the C2 (HTTP, HTTPS, DNS tunneling, etc.).
-
-✅ **Answer**  
-HTTP
-
----
-
-### 🧾 Summary of IOCs
-
-| Type        | Value                                                        |
-|-------------|--------------------------------------------------------------|
-| MD5         | c700d75303b8cc2ea8a996cd5e975ec1                             |
-| SHA256      | 8cc57bc1284f68b2aae1e6cb8fa86793db131e9bbbfb40b5eb235a0628c57da9 |
-| IP          | 185.234.247.118                                              |
-| Domain      | morningglow.ddns.net                                         |
-| Dropped File| x334761.dat                                                  |
-| Registry    | HKCU\Software\Microsoft\Windows\CurrentVersion\Run\OfficeUpdate |
-| Protocol    | HTTP                                                         |
-
----
-
-### 🔧 Tools Used
-
-- VirusTotal  
-- MalwareBazaar  
-- Hybrid Analysis  
-- ANY.RUN  
-- AbuseIPDB  
-- IPinfo.io
-
----
-
-### 🏁 Conclusion
-
-This lab demonstrates how to perform an in-depth analysis of a real-world Remote Access Trojan using OSINT tools. By tracing its artifacts across multiple platforms, you’ve uncovered its infrastructure, persistence techniques, and potential attribution.
-
-Stay sharp, analyst. 🕵️‍♂️
+🧩 Q10 – What MITRE ID corresponds to the final observed tactic?
+Answer: T1486 – Data Encrypted for Impact
+🔎 Final action involves encrypting data for disruption.
